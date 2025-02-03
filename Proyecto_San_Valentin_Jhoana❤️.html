@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>San Valentín Especial</title>
+  <style>
+    /* Estilos generales */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff6f61, #ffcccb);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      z-index: 2;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    button {
+      background-color: #ff4757;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s, transform 0.3s;
+      z-index: 2;
+    }
+
+    button:hover {
+      background-color: #ff6b81;
+      transform: scale(1.1);
+    }
+
+    button#no-btn {
+      background-color: #ffcccb;
+      color: #ff4757;
+    }
+
+    /* Animación de corazones */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff6b81;
+      transform: rotate(-45deg);
+      animation: float 5s infinite ease-in-out;
+      z-index: 1;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff6b81;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      top: 0;
+      left: 10px;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) rotate(-45deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(-45deg);
+      }
+    }
+
+    /* Nubes animadas */
+    .clouds {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .cloud {
+      position: absolute;
+      width: 120px;
+      height: 40px;
+      background: white;
+      border-radius: 100px;
+      animation: moveClouds 20s linear infinite;
+    }
+
+    .cloud::before,
+    .cloud::after {
+      content: '';
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .cloud::before {
+      width: 60px;
+      height: 60px;
+      top: -30px;
+      left: 10px;
+    }
+
+    .cloud::after {
+      width: 80px;
+      height: 80px;
+      top: -40px;
+      right: 10px;
+    }
+
+    @keyframes moveClouds {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* Rollo fotográfico */
+    .photo-roll {
+      display: none;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+      margin-top: 30px;
+      z-index: 2;
+    }
+
+    .photo-roll-container {
+      display: inline-block;
+      animation: scroll 120s linear infinite;
+    }
+
+    .photo-roll img,
+    .photo-roll video {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin: 0 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+
+    .photo-roll video {
+      background: black; /* Fondo para videos */
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* Overlay para el zoom */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .overlay img,
+    .overlay video {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+
+    .overlay p {
+      position: absolute;
+      bottom: 20px;
+      color: #fff;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Contenedor para la imagen en la parte superior derecha -->
+  <div id="imagen-superior-derecha" style="display: none; position: absolute; top: 20px; right: 20px; z-index: 3;">
+    <img src="https://raw.githubusercontent.com/seyer12345/mi_audio/refs/heads/main/Beso%20-%20Jósean%20Log.png" alt="Imagen Superior Derecha" style="width: 300px; height: 150px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);">
+  </div>
+  
+  <!-- Nubes animadas -->
+  <div class="clouds">
+    <div class="cloud" style="top: 10%; animation-duration: 25s;"></div>
+    <div class="cloud" style="top: 20%; animation-duration: 30s;"></div>
+    <div class="cloud" style="top: 30%; animation-duration: 20s;"></div>
+    <div class="cloud" style="top: 40%; animation-duration: 35s;"></div>
+  </div>
+
+  <h1>¡Feliz San Valentín!</h1>
+  <p>¿Aceptas ser mi San Valentín?</p>
+  <div class="buttons">
+    <button id="yes-btn" onclick="mostrarMensaje()">¡Sí, acepto!</button>
+    <button id="no-btn" onclick="cambiarRespuesta()">No, no lose</button>
+  </div>
+
+  <!-- Rollo fotográfico -->
+  <div class="photo-roll" id="photo-roll">
+    <div class="photo-roll-container">
+      <img src="https://lh3.googleusercontent.com/d/1mvIF8VLT3DJwx5_L9Qmq5jX6bySZGNaK=w800" alt="Foto 1" data-text="¡Nuestra primera aventura!">
+      <img src="https://lh3.googleusercontent.com/d/1fAOTLvfOXKaluqOiRk1AKsXxJzFdzIQE=w800" alt="Foto 3" data-text="Juntos somos imparables🫂">
+      <img src="https://lh3.googleusercontent.com/d/1JEPbW6Ld018GsPWH5OpffVlRXU8xDQFE=w800" alt="Foto 5" data-text="Contigo todo es mejor🥺">
+      <img src="https://lh3.googleusercontent.com/d/1z7IkUDJ59a7Wd9mBhPz8yGyDnv7MjrwJ=w800" alt="Foto 6" data-text="Mi persona favorita😍">
+      <img src="https://lh3.googleusercontent.com/d/1FhHdon-jUUMGUxAR7jnFQNU6cCt3evNp=w800" alt="Foto 7" data-text="Gracias por estar siempre💕">
+      <video controls loop muted playsinline data-text="Un momento inolvidable ❤️">
+        <source src="https://github.com/seyer12345/mi_audio/raw/refs/heads/main/copy_88113A94-C4D0-4A14-8BB2-707225BB5C9B.mp4" type="video/mp4">
+        Tu navegador no soporta videos.
+      </video>
+      <img src="https://lh3.googleusercontent.com/d/1hYKSAsGzaRM64nFdwJq2r0VAHNvEq-hG=w800" alt="Foto 8" data-text="Te amo más cada día❤️">
+      <img src="https://lh3.googleusercontent.com/d/1Ot_Lkp-IZqodcgFWoRFucAgcEevTTfs7=w800" alt="Foto 9" data-text="Eres mi todo😶‍🌫️">
+      <img src="https://lh3.googleusercontent.com/d/1MKsmL-s6ATeC_afGdeazqODqLz478-Bb=w800" alt="Foto 10" data-text="Nuestros mejores momentos💋">
+      <img src="https://lh3.googleusercontent.com/d/1M_XF0n5h-PBUBTVo7tA_oRlQqyHlaLew=w800" alt="Foto 11" data-text="Siempre juntos💕👈">
+      <video controls loop muted playsinline data-text="Tu Amor Me Llena de Felicidad🤗">
+        <source src="https://github.com/seyer12345/mi_audio/raw/refs/heads/main/VIDEO-2025-01-31-15-46-57.mp4" type="video/mp4">
+        Tu navegador no soporta videos.
+      </video>
+      <img src="https://lh3.googleusercontent.com/d/1JEPbW6Ld018GsPWH5OpffVlRXU8xDQFE=w800" alt="Foto 12" data-text="Eres mi felicidad😚">
+      <img src="https://lh3.googleusercontent.com/d/1U8tuewBu_p80ClWXXlDX-mA2I3LLyRdM=w800" alt="Foto 13" data-text="Eres mi inspiración😉">
+      <img src="https://lh3.googleusercontent.com/d/1tDCOxtGFo4NAVGLqOHozy2HjVbs-Xn_x=w800" alt="Foto 14" data-text="Mi amor por ti es eterno🥰🫶">
+      <img src="https://lh3.googleusercontent.com/d/1WapXj_7szb0aBWfvhE9mzH6bWlPMpuGw=w800" alt="Foto 15" data-text="Eres mi sueño hecho realidad🧸🪄">
+      <video controls loop muted playsinline data-text="Un momento inolvidable ❤️">
+        <source src="https://github.com/seyer12345/mi_audio/raw/refs/heads/main/1000085791.MP4" type="video/mp4">
+        Tu navegador no soporta videos.
+      </video>
+    </div>
+  </div>
+
+  <!-- Overlay para el zoom -->
+  <div class="overlay" id="overlay">
+    <div id="overlay-content">
+      <img id="zoomed-img" src="" alt="Zoomed Image" style="display: none;">
+      <video id="zoomed-video" controls loop muted playsinline style="display: none;">
+        <source src="" type="video/mp4">
+        Tu navegador no soporta videos.
+      </video>
+    </div>
+    <p id="zoomed-text"></p>
+  </div>
+
+  <!-- Corazones animados -->
+  <div class="heart" style="top: 10%; left: 20%;"></div>
+  <div class="heart" style="top: 20%; left: 50%;"></div>
+  <div class="heart" style="top: 30%; left: 80%;"></div>
+  <div class="heart" style="top: 50%; left: 10%;"></div>
+  <div class="heart" style="top: 70%; left: 70%;"></div>
+
+  <!-- Música de fondo -->
+  <audio id="background-music" loop>
+    <source src="https://github.com/seyer12345/mi_audio/raw/refs/heads/main/Beso%20-%20J%C3%B3sean%20Log.mp3" type="audio/mpeg">
+    Tu navegador no soporta la reproducción de audio.
+  </audio>
+
+  <script>
+    const frases = [
+      "¿Segura? ¡Piénsalo de nuevo!",
+      "¡No puedes decir que no!",
+      "¿En serio? ¡Eres mi única opción!",
+      "¡Te amo demasiado para aceptar un no!",
+      "¡El corazón me dice que digas que sí!",
+      "¡Vamos, dale una oportunidad al amor!",
+      "¡No hay nadie como tú en el mundo!",
+      "¡Eres mi persona favorita!",
+      "¡No puedo imaginar un San Valentín sin ti!",
+      "¡Por favor, di que sí! ❤️"
+    ];
+
+    let contador = 0;
+
+    function mostrarMensaje() {
+      // Mostrar alerta
+      alert("¡Gracias! Eres el mejor San Valentín. ❤️");
+
+      // Cambiar el fondo
+      document.body.style.background = "linear-gradient(135deg, #ff6b81, #ff4757)";
+
+      // Mostrar rollo fotográfico
+      const photoRoll = document.getElementById("photo-roll");
+      photoRoll.style.display = "block";
+      photoRoll.querySelector(".photo-roll-container").style.animationPlayState = "running";
+
+      // Mostrar la imagen en la parte superior derecha
+      const imagenSuperiorDerecha = document.getElementById("imagen-superior-derecha");
+      imagenSuperiorDerecha.style.display = "block";
+      
+      // Reproducir música de fondo
+      const music = document.getElementById("background-music");
+      music.play();
+
+      // Animación de confeti
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.animationDelay = `${Math.random() * 2}s`;
+        document.body.appendChild(confetti);
+      }
+    }
+
+    function cambiarRespuesta() {
+      const noBtn = document.getElementById("no-btn");
+      if (contador < frases.length) {
+        noBtn.textContent = frases[contador];
+        contador++;
+      } else {
+        noBtn.textContent = "¡Ya no hay opción, di que sí!";
+        noBtn.disabled = true;
+      }
+    }
+
+    // Función para el zoom de las imágenes y videos
+    const images = document.querySelectorAll(".photo-roll img, .photo-roll video");
+    const overlay = document.getElementById("overlay");
+    const zoomedImg = document.getElementById("zoomed-img");
+    const zoomedVideo = document.getElementById("zoomed-video");
+    const zoomedText = document.getElementById("zoomed-text");
+
+images.forEach(item => {
+      item.addEventListener("click", () => {
+        if (item.tagName === "IMG") {
+          zoomedImg.src = item.src;
+          zoomedImg.style.display = "block";
+          zoomedVideo.style.display = "none";
+        } else if (item.tagName === "VIDEO") {
+          zoomedVideo.src = item.querySelector("source").src;
+          zoomedVideo.style.display = "block";
+          zoomedImg.style.display = "none";
+          zoomedVideo.play(); // Reproducir el video automáticamente
+        }
+        zoomedText.textContent = item.getAttribute("data-text");
+        overlay.style.display = "flex";
+      });
+    });
+
+    // Variables para manejar los toques
+    let tapCount = 0;
+    let lastTapTime = 0;
+
+    // Función para cerrar el overlay con dos toques
+    overlay.addEventListener("click", () => {
+      const currentTime = new Date().getTime();
+      const tapLength = currentTime - lastTapTime;
+
+      if (tapCount === 0 || tapLength < 300) {
+        tapCount++;
+      } else {
+        tapCount = 1;
+      }
+
+      lastTapTime = currentTime;
+
+      if (tapCount === 2) {
+        overlay.style.display = "none";
+        zoomedVideo.pause(); // Pausar el video al cerrar el overlay
+        tapCount = 0; // Reiniciar el contador de toques
+      }
+    });
+  </script>
+</body>
+</html>
